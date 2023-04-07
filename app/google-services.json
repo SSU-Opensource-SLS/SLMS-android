@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "659467501735",
+    "project_id": "ssu-sls",
+    "storage_bucket": "ssu-sls.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:659467501735:android:91e2bbd52922cb9f62db82",
+        "android_client_info": {
+          "package_name": "com.opensource.sls"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "659467501735-f4ha8aa6p58o9kpdq3v6l76afh41gep3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.opensource.sls",
+            "certificate_hash": "c7cbaa29478d8361f465f4ebb21b9185b59dc534"
+          }
+        },
+        {
+          "client_id": "659467501735-2thhkm1cl957e33dkvcgrnun6olrn2da.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAivrpyHyszJw01WEbrReztY2axUwCgW_w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "659467501735-2thhkm1cl957e33dkvcgrnun6olrn2da.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

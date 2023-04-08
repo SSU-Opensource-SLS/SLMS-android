@@ -42,7 +42,7 @@
             android:layout_gravity="center"
             android:backgroundTint="#FFFFFF"
             android:scaleType="centerCrop"
-            android:src="@drawable/back"
+            android:src="@drawable/calendar"
             tools:ignore="SpeakableTextPresentCheck"/>
     </LinearLayout>
 
@@ -74,6 +74,7 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
+                    android:id="@+id/cowLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -84,10 +85,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:scaleType="fitCenter"
                         android:backgroundTint="@color/white"
+                        android:scaleType="fitCenter"
                         app:srcCompat="@drawable/cow"
-                        tools:ignore="SpeakableTextPresentCheck"/>
+                        tools:ignore="SpeakableTextPresentCheck" />
 
                     <TextView
                         android:id="@+id/textView"
@@ -99,6 +100,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/pigLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -109,10 +111,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:scaleType="fitCenter"
                         android:backgroundTint="@color/white"
+                        android:scaleType="fitCenter"
                         app:srcCompat="@drawable/pig"
-                        tools:ignore="SpeakableTextPresentCheck"/>
+                        tools:ignore="SpeakableTextPresentCheck" />
 
                     <TextView
                         android:id="@+id/textView2"
@@ -124,6 +126,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/horseLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -134,10 +137,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:scaleType="fitCenter"
                         android:backgroundTint="@color/white"
+                        android:scaleType="fitCenter"
                         app:srcCompat="@drawable/horse"
-                        tools:ignore="SpeakableTextPresentCheck"/>
+                        tools:ignore="SpeakableTextPresentCheck" />
 
                     <TextView
                         android:id="@+id/textView3"
@@ -156,6 +159,7 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
+                    android:id="@+id/goatLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -166,10 +170,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:scaleType="fitCenter"
                         android:backgroundTint="@color/white"
+                        android:scaleType="fitCenter"
                         app:srcCompat="@drawable/goat"
-                        tools:ignore="SpeakableTextPresentCheck"/>
+                        tools:ignore="SpeakableTextPresentCheck" />
 
                     <TextView
                         android:id="@+id/textView4"
@@ -181,6 +185,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/sheepLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -191,10 +196,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:scaleType="fitCenter"
                         android:backgroundTint="@color/white"
+                        android:scaleType="fitCenter"
                         app:srcCompat="@drawable/sheep"
-                        tools:ignore="SpeakableTextPresentCheck"/>
+                        tools:ignore="SpeakableTextPresentCheck" />
 
                     <TextView
                         android:id="@+id/textView5"
@@ -224,7 +229,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="20dp"
         android:layout_weight="1"
         android:gravity="bottom|center_horizontal"
         android:orientation="horizontal"
@@ -234,7 +239,7 @@
             android:id="@+id/view3"
             android:layout_width="8dp"
             android:layout_height="8dp"
-            android:background="@drawable/back"
+            android:background="@drawable/circle_view"
             android:backgroundTint="#81d654" />
 
         <View
@@ -242,6 +247,6 @@
             android:layout_width="8dp"
             android:layout_height="8dp"
             android:layout_marginLeft="15dp"
-            android:background="@drawable/back" />
+            android:background="@drawable/circle_view" />
     </LinearLayout>
 </LinearLayout>

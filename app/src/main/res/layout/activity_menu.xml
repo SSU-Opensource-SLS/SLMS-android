@@ -69,18 +69,19 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:id="@+id/practiceButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
                 android:layout_marginLeft="24dp"
                 android:layout_marginRight="16dp"
                 android:layout_weight="1"
->
+                android:background="@drawable/bg_monitor"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -88,7 +89,7 @@
                     android:layout_weight="1"
                     android:paddingLeft="16dp"
                     android:paddingTop="16dp"
-                    android:text="학습하기"
+                    android:text="축사 모니터링"
                     android:textColor="#000000"
                     android:textSize="18dp"
                     android:textStyle="bold" />
@@ -105,16 +106,19 @@
                 <LinearLayout
                     android:id="@+id/learningButton"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginBottom="8dp"
+                    android:layout_weight="2"
+                    android:background="@drawable/bg_manage"
                     android:orientation="vertical">
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:paddingLeft="16dp"
                         android:paddingTop="16dp"
-                        android:text="연습하기"
+                        android:text="가축 관리"
                         android:textColor="#000000"
                         android:textSize="18dp"
                         android:textStyle="bold" />
@@ -125,15 +129,18 @@
                     android:id="@+id/manageButton"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:layout_marginTop="8dp">
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="3"
+                    android:background="@drawable/bg_foodmg"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:paddingLeft="16dp"
                         android:paddingTop="16dp"
-                        android:text="아동관리"
+                        android:text="식량 관리"
                         android:textColor="#000000"
                         android:textSize="18dp"
                         android:textStyle="bold" />
@@ -145,24 +152,27 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_weight="5"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:id="@+id/communityButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
                 android:layout_marginLeft="24dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="24dp"
-                android:layout_marginBottom="24dp">
+                android:layout_marginBottom="24dp"
+                android:background="@drawable/bg_community"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:paddingLeft="16dp"
                     android:paddingTop="16dp"
-                    android:text="소통하기"
+                    android:text="커뮤니티"
                     android:textColor="#000000"
                     android:textSize="18dp"
                     android:textStyle="bold" />

@@ -41,6 +41,10 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    // google exoplayer
+    implementation 'com.google.android.exoplayer:exoplayer:2.15.0'
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.15.1'
+
     // For Firebase
     implementation platform('com.google.firebase:firebase-bom:31.2.3')
     implementation 'com.google.firebase:firebase-auth-ktx'
@@ -50,6 +54,8 @@ dependencies {
     implementation 'com.android.volley:volley:1.2.1'
     // okhttp3
     implementation "com.squareup.okhttp3:okhttp:4.10.0"
+    implementation "com.squareup.okhttp3:logging-interceptor:4.10.0"
+    implementation "com.squareup.okhttp3:okhttp-urlconnection:4.10.0"
 
     implementation 'com.google.firebase:firebase-analytics'
 

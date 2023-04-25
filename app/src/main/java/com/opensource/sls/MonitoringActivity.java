@@ -13,6 +13,17 @@ import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class MonitoringActivity extends AppCompatActivity {
     private WebView videoWebView;
     private ImageView livestockType;
@@ -39,14 +50,55 @@ public class MonitoringActivity extends AppCompatActivity {
                 return false;
             }
         });
-
         String url = "http://10.0.2.2:5000/stream";
         videoWebView.loadUrl(url);
         setLivestockInfo();
     }
 
     void setLivestockInfo() {
-        livestockName.setText("누렁이");
-        livestockPosition.setText("1번 축사");
+        // 가축 정보 요청하는 코드 작성
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String livestockUrl = "http://10.0.2.2:5000/livestock";
+
+        JsonObjectRequest livestockRequest = new JsonObjectRequest(Request.Method.GET, livestockUrl, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            // 가축 정보 추출
+                            //String type = response.getString("type");
+                            String name = response.getString("name");
+                            String position = response.getString("Position");
+
+                            // UI 업데이트
+                            //livestockType.setImageResource(getImageResource(type));
+                            livestockName.setText(name);
+                            livestockPosition.setText(position);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                });
+        queue.add(livestockRequest);
     }
+
+    // 가축 종류에 따라 이미지 리소스 반환
+    /*private int getImageResource(String type) {
+        switch (type) {
+            case "cow":
+                return R.drawable.cow;
+            case "pig":
+                return R.drawable.pig;
+            case "sheep":
+                return R.drawable.sheep;
+            default:
+                return R.drawable.animal;
+        }
+    }*/
 }

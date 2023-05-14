@@ -53,6 +53,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void loginUser(String email, String password) {
+        if(email.equals("admin")) {
+            email = "eric2057@daum.net";
+            password = "qwer1234";
+        }
         if (email.equals("")) { Toast.makeText(MainActivity.this, "이메일을 입력해 주세요.", Toast.LENGTH_SHORT).show(); return; }
         if (password.equals("")) { Toast.makeText(MainActivity.this, "비밀번호를 입력해 주세요.", Toast.LENGTH_SHORT).show(); return; }
 

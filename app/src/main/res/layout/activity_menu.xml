@@ -63,8 +63,8 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-                <!--android:background="@drawable/round_top"-->
+                android:layout_height="match_parent"
+                android:background="@drawable/round_top"/>
         </LinearLayout>
 
         <LinearLayout
@@ -104,7 +104,7 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:id="@+id/learningButton"
+                    android:id="@+id/manageButton"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="8dp"
@@ -126,7 +126,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/manageButton"
+                    android:id="@+id/manageFoodButton"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="8dp"

@@ -50,7 +50,7 @@ public class MonitoringActivity extends AppCompatActivity {
                 return false;
             }
         });
-        String url = "http://10.0.2.2:5000/stream";
+        String url = "http://203.253.25.202:5000/stream?src=0";
         videoWebView.loadUrl(url);
         //setLivestockInfo();
     }

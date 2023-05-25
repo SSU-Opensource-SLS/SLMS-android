@@ -8,15 +8,34 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.service.controls.actions.BooleanAction;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.gson.Gson;
+import com.opensource.sls.DTO.InputLivestockDTO;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicReference;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class ManageLivestockActivity extends AppCompatActivity implements View.OnClickListener {
     private FirebaseAuth mAuth;
@@ -24,7 +43,14 @@ public class ManageLivestockActivity extends AppCompatActivity implements View.O
     private Button registerButton;
     LinearLayoutManager layoutManager;
     LivestockAdapter adapter;
+    ImageView backButton;
     ArrayList<LivestockItem> livestockItems;
+
+    private static final OkHttpClient client = new OkHttpClient();
+
+    private static final Gson gson = new Gson();
+
+    InputLivestockDTO inputLivestockDTO[] = {null};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,16 +59,13 @@ public class ManageLivestockActivity extends AppCompatActivity implements View.O
         mAuth = FirebaseAuth.getInstance();
         recyclerView = findViewById(R.id.livestockRecyclerView);
         registerButton = findViewById(R.id.register_livestock_button);
+        backButton = findViewById(R.id.livestock_back);
         livestockItems = new ArrayList<LivestockItem>();
 
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new LivestockAdapter(getApplicationContext());
-        LivestockItem item1 = new LivestockItem(1L,"asfaa","누렁이","cow","1번 축사",true);
-        adapter.addItem(item1);
-        LivestockItem item2 = new LivestockItem(2L,"asfaa","얼룩이","cow","2번 축사",false);
-        adapter.addItem(item2);
-        //getLivestockDatas(adapter,livestockItems);
+        getLivestockDatas(adapter,livestockItems);
         recyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickListener(new LivestockAdapter.OnItemClickListener() {
@@ -58,23 +81,33 @@ public class ManageLivestockActivity extends AppCompatActivity implements View.O
             }
         });
 
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         adapter.setOnItemLongClickListener(new LivestockAdapter.OnItemLongClickListener() {
             @Override
             public void onItemLongClick(LivestockAdapter.ViewHolder holder, View view, int position) {
                 LivestockItem item = adapter.getItem(position);
-                showRemoveLivestock(item.getName());
-                adapter.deleteItem(item);
-                adapter.notifyDataSetChanged();
+                showRemoveLivestock(adapter,item);
             }
         });
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(),"sdsafa",Toast.LENGTH_SHORT).show();
-                showRegisterLivestock();
+                showRegisterLivestock(adapter, new OnRegisterLivestockListener() {
+                    @Override
+                    public void onLivestockRegistered(InputLivestockDTO livestockDTO) {
+                        getLastLivestock(adapter, livestockDTO);
+                    }
+                });
             }
         });
+
     }
 
     @Override
@@ -83,18 +116,140 @@ public class ManageLivestockActivity extends AppCompatActivity implements View.O
         }
     }
 
-    public void registerLivestock(LivestockItem item) {
+    public void registerLivestock(InputLivestockDTO item) {
+        //Toast.makeText(getApplicationContext(),item.getLivestock_type()+item.getName(),Toast.LENGTH_SHORT).show();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String url = "http://10.0.2.2:5000/livestock";
+                String json = gson.toJson(item);
+
+                RequestBody requestBody = RequestBody.create(json, MediaType.get("application/json; charset=utf-8"));
+                Request request = new Request.Builder()
+                        .url(url)
+                        .post(requestBody)
+                        .build();
+
+                try {
+                    // 요청 실행
+                    Response response = client.newCall(request).execute();
+
+                    // 응답 처리
+                    if (response.isSuccessful()) {
+                        String responseBody = response.body().string();
+                        // 응답 결과 처리
+                        System.out.println(responseBody);
+                    } else {
+                        // 응답 실패 처리
+                        System.out.println("Request failed: " + response.code());
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
-    public void getLivestockDatas(LivestockAdapter adapter, ArrayList<LivestockItem> studentItems) {
+
+    public void deleteLivestock(LivestockItem livestockItem) {
+        // 요청 URL 생성
+        String url = "http://10.0.2.2:5000/livestock/" + livestockItem.getUid() + "/" +
+                livestockItem.getLivestock_type() + "/" + livestockItem.getNum();
+
+        // DELETE 요청 생성
+        Request request = new Request.Builder()
+                .url(url)
+                .delete()
+                .build();
+
+        // 요청 실행
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) {
+                if (response.isSuccessful()) {
+                    // 삭제 성공
+                    try {
+                        String result = response.body().string();
+                        // 처리할 로직 작성
+                    } catch (IOException e) {
+                        // 예외 처리
+                        e.printStackTrace();
+                    }
+                    // 처리 결과를 이용하여 필요한 작업 수행
+                } else {
+                    // 삭제 실패
+                    // 오류 처리
+                }
+            }
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                // 통신 실패
+                // 오류 처리
+            }
+        });
     }
-    public void showRemoveLivestock(String removeName) {
+
+    public void getLivestockDatas(final LivestockAdapter adapter, final ArrayList<LivestockItem> livestockItems) {
+        String url = "http://10.0.2.2:5000/livestock/" + mAuth.getUid(); // Replace with your actual API URL
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                // Handle network failure
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    try {
+                        String responseBody = response.body().string();
+                        JSONArray livestockArray = new JSONArray(responseBody);
+                        for (int i = 0; i < livestockArray.length(); i++) {
+                            JSONObject livestockObject = livestockArray.getJSONObject(i);
+                            String uid = livestockObject.getString("uid");
+                            String livestockType = livestockObject.getString("livestock_type");
+                            Long num = livestockObject.getLong("num");
+                            String name = livestockObject.getString("name");
+                            String cattle = livestockObject.getString("cattle");
+                            Number is_pregnancy = 0;
+                            if (!livestockObject.isNull("is_pregnancy")) {
+                                is_pregnancy = livestockObject.getInt("is_pregnancy");
+                            }
+
+                            LivestockItem livestockItem = new LivestockItem(uid, livestockType, num, name, cattle, is_pregnancy);
+                            livestockItems.add(livestockItem);
+                        }
+
+                        // Update the adapter on the main thread
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                adapter.addItems(livestockItems);
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    // Handle unsuccessful response
+                }
+            }
+        });
+    }
+
+    public void showRemoveLivestock(final LivestockAdapter adapter, LivestockItem item) {
         AlertDialog.Builder deleteDlg = new AlertDialog.Builder(this);
-        deleteDlg.setTitle(removeName + "를(을) 삭 하시겠습니까?");
+        deleteDlg.setTitle(item.getName() + "를(을) 삭제 하시겠습니까?");
         deleteDlg.setIcon(R.drawable.main_cow);
         deleteDlg.setNegativeButton("네", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogIn제erface, int i) {
-                // 가축 삭제 함수 호출
+                deleteLivestock(item);
+                adapter.deleteItem(item);
+                adapter.notifyDataSetChanged();
             }
         });
         deleteDlg.setPositiveButton("아니요", new DialogInterface.OnClickListener() {
@@ -106,13 +261,16 @@ public class ManageLivestockActivity extends AppCompatActivity implements View.O
         deleteDlg.show();
     }
 
-    public void showRegisterLivestock() {
+    public void showRegisterLivestock(final LivestockAdapter adapter, final OnRegisterLivestockListener listener) {
+        final String[] livestock_type = {""};
+        //final AtomicReference<String> finalLivestockType = new AtomicReference<>(livestock_type);
+
         View dlgView = View.inflate(ManageLivestockActivity.this, R.layout.register_livestock, null);
         AlertDialog.Builder registerDlg = new AlertDialog.Builder(ManageLivestockActivity.this);
         registerDlg.setTitle("가축 등록");
         registerDlg.setIcon(R.drawable.main_cow);
         registerDlg.setView(dlgView);
-        final EditText livestcokName = dlgView.findViewById(R.id.register_livestock_name);
+        final EditText livestockName = dlgView.findViewById(R.id.register_livestock_name);
         final EditText livestockCattle = dlgView.findViewById(R.id.register_livestock_cattle);
         final ImageButton cowImageButton = dlgView.findViewById(R.id.registerCowImageButton);
         final ImageButton pigImageButton = dlgView.findViewById(R.id.registerPigImageButton);
@@ -124,10 +282,82 @@ public class ManageLivestockActivity extends AppCompatActivity implements View.O
         final View horseLayout = dlgView.findViewById(R.id.registerHorseLayout);
         final View goatLayout = dlgView.findViewById(R.id.registerGoatLayout);
         final View sheepLayout = dlgView.findViewById(R.id.registerSheepLayout);
+
+        cowImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                livestock_type[0] = "cow";
+                //finalLivestockType.set("cow");
+                cowLayout.setBackground(getResources().getDrawable(R.drawable.view_edge));
+                horseLayout.setBackground(getResources().getDrawable(R.drawable.normal_view));
+                pigLayout.setBackground(getResources().getDrawable(R.drawable.normal_view));
+                goatLayout.setBackground(getResources().getDrawable(R.drawable.normal_view));
+                sheepLayout.setBackground(getResources().getDrawable(R.drawable.normal_view));
+            }
+        });
+
+        pigImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                livestock_type[0] = "pig";
+                //finalLivestockType.set("pig");
+                pigLayout.setBackground(getResources().getDrawable(R.drawable.view_edge));
+                cowLayout.setBackground(getResources().getDrawable(R.drawable.normal_view));
+                horseLayout.setBackground(getResources().getDrawable(R.drawable.normal_view));
+                goatLayout.setBackground(getResources().getDrawable(R.drawable.normal_view));
+                sheepLayout.setBackground(getResources().getDrawable(R.drawable.normal_view));
+            }
+        });
+
+        horseImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                livestock_type[0] = "horse";
+                //finalLivestockType.set("horse");
+                horseLayout.setBackground(getResources().getDrawable(R.drawable.view_edge));
+                cowLayout.setBackground(getResources().getDrawable(R.drawable.normal_view));
+                pigLayout.setBackground(getResources().getDrawable(R.drawable.normal_view));
+                goatLayout.setBackground(getResources().getDrawable(R.drawable.normal_view));
+                sheepLayout.setBackground(getResources().getDrawable(R.drawable.normal_view));
+            }
+        });
+
+        goatImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                livestock_type[0] = "goat";
+                //finalLivestockType.set("goat");
+                goatLayout.setBackground(getResources().getDrawable(R.drawable.view_edge));
+                cowLayout.setBackground(getResources().getDrawable(R.drawable.normal_view));
+                pigLayout.setBackground(getResources().getDrawable(R.drawable.normal_view));
+                horseLayout.setBackground(getResources().getDrawable(R.drawable.normal_view));
+                sheepLayout.setBackground(getResources().getDrawable(R.drawable.normal_view));
+            }
+        });
+
+        sheepImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                livestock_type[0] = "sheep";
+                //finalLivestockType.set("sheep");
+                sheepLayout.setBackground(getResources().getDrawable(R.drawable.view_edge));
+                cowLayout.setBackground(getResources().getDrawable(R.drawable.normal_view));
+                pigLayout.setBackground(getResources().getDrawable(R.drawable.normal_view));
+                goatLayout.setBackground(getResources().getDrawable(R.drawable.normal_view));
+                horseLayout.setBackground(getResources().getDrawable(R.drawable.normal_view));
+            }
+        });
+
         horseLayout.setBackground(getResources().getDrawable(R.drawable.view_edge));
         registerDlg.setPositiveButton("등록", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                InputLivestockDTO item = new InputLivestockDTO(mAuth.getUid(), livestock_type[0], livestockName.getText().toString(), livestockCattle.getText().toString());
+                inputLivestockDTO[0] = item;
+                registerLivestock(item);
+
+                // 완료 콜백을 호출하여 getLastLivestock 함수를 호출
+                listener.onLivestockRegistered(item);
             }
         });
         registerDlg.setNegativeButton("취소", new DialogInterface.OnClickListener() {
@@ -137,5 +367,43 @@ public class ManageLivestockActivity extends AppCompatActivity implements View.O
             }
         });
         registerDlg.show();
+    }
+
+    public void getLastLivestock(final LivestockAdapter adapter, InputLivestockDTO inputLivestockDTO) {
+        String jsonBody = gson.toJson(inputLivestockDTO);
+
+        String url = "http://10.0.2.2:5000/livestock/last/" + inputLivestockDTO.getUid() + "/" + inputLivestockDTO.getLivestock_type();
+        Request request = new Request.Builder()
+                .url(url)
+                .get()
+                .build();
+
+        Call call = client.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                // Handle failure
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String responseBody = response.body().string();
+                    LivestockItem livestockItem = gson.fromJson(responseBody, LivestockItem.class);
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            adapter.addItem(livestockItem);
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+                } else {
+                    // Handle error response
+                    // ...
+                }
+            }
+        });
     }
 }

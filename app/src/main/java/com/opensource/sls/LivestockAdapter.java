@@ -63,6 +63,9 @@ public class LivestockAdapter extends RecyclerView.Adapter<LivestockAdapter.View
     public void deleteItem(LivestockItem item) {
         items.remove(item);
     }
+    public void deleteAll() {
+        items.clear();
+    }
 
     public LivestockItem getItem(int position) {
         return items.get(position);
@@ -109,7 +112,7 @@ public class LivestockAdapter extends RecyclerView.Adapter<LivestockAdapter.View
 
         public void setItem(LivestockItem item) {
             livestockName.setText(item.getName());
-            if(item.is_pregnancy)
+            if((item.getIs_pregnancy() != null && item.getIs_pregnancy().intValue() != 0))
                 isPregnancy.setVisibility(View.VISIBLE);
         }
 

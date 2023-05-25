@@ -21,7 +21,6 @@ public class MenuActivity extends AppCompatActivity {
         monitoringButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
                 Intent intent = new Intent(getApplicationContext(), MonitoringActivity.class);
                 startActivity(intent);
             }
@@ -30,7 +29,6 @@ public class MenuActivity extends AppCompatActivity {
         manageLivestockButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
                 Intent intent = new Intent(getApplicationContext(), ManageLivestockActivity.class);
                 startActivity(intent);
             }

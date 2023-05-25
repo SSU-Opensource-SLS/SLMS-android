@@ -1,20 +1,26 @@
 package com.opensource.sls;
 
-import java.util.ArrayList;
-
 public class UserModel {
+    private String uid;
     private String name;
     private String email;
     private String birth;
-    private ArrayList<String> livestocks;
 
     public UserModel() {}
 
-    public UserModel(String name, String email, String birth, ArrayList<String> livestocks) {
+    public UserModel(String uid, String name, String email, String birth) {
+        this.uid = uid;
         this.name = name;
         this.email = email;
         this.birth = birth;
-        this.livestocks = livestocks;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getName() {
@@ -39,13 +45,5 @@ public class UserModel {
 
     public void setBirth(String birth) {
         this.birth = birth;
-    }
-
-    public ArrayList<String> getLivestocks() {
-        return livestocks;
-    }
-
-    public void setLivestocks(ArrayList<String> livestocks) {
-        this.livestocks = livestocks;
     }
 }

@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.service.controls.actions.BooleanAction;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,7 +15,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.opensource.sls.DTO.InputLivestockDTO;
@@ -27,7 +25,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicReference;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -265,7 +262,7 @@ public class ManageLivestockActivity extends AppCompatActivity implements View.O
         final String[] livestock_type = {""};
         //final AtomicReference<String> finalLivestockType = new AtomicReference<>(livestock_type);
 
-        View dlgView = View.inflate(ManageLivestockActivity.this, R.layout.register_livestock, null);
+        View dlgView = View.inflate(ManageLivestockActivity.this, R.layout.register_livestock_dlg, null);
         AlertDialog.Builder registerDlg = new AlertDialog.Builder(ManageLivestockActivity.this);
         registerDlg.setTitle("가축 등록");
         registerDlg.setIcon(R.drawable.main_cow);

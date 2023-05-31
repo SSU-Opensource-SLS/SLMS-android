@@ -208,7 +208,7 @@ public class ManageLivestockActivity extends AppCompatActivity implements View.O
                             String uid = livestockObject.getString("uid");
                             String livestockType = livestockObject.getString("livestock_type");
                             Long num = livestockObject.getLong("num");
-                            String name = livestockObject.getString("name");
+                            String name = livestockObject.getString("livestock_name");
                             String cattle = livestockObject.getString("cattle");
                             Number is_pregnancy = 0;
                             if (!livestockObject.isNull("is_pregnancy")) {
@@ -345,7 +345,6 @@ public class ManageLivestockActivity extends AppCompatActivity implements View.O
             }
         });
 
-        horseLayout.setBackground(getResources().getDrawable(R.drawable.view_edge));
         registerDlg.setPositiveButton("등록", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {

@@ -7,15 +7,17 @@ public class CamQRDto implements Serializable {
     String wifi_name;
     String wifi_pwd;
     String livestock_type;
+    String livestock_name;
 
     public CamQRDto() {
     }
 
-    public CamQRDto(String uid, String wifi_name, String wifi_pwd, String livestock_type) {
+    public CamQRDto(String uid, String wifi_name, String wifi_pwd, String livestock_type, String livestock_name) {
         this.uid = uid;
         this.wifi_name = wifi_name;
         this.wifi_pwd = wifi_pwd;
         this.livestock_type = livestock_type;
+        this.livestock_name = livestock_name;
     }
 
     public String getUid() {
@@ -48,5 +50,13 @@ public class CamQRDto implements Serializable {
 
     public void setLivestock_type(String livestock_type) {
         this.livestock_type = livestock_type;
+    }
+
+    public String getLivestock_name() {
+        return livestock_name;
+    }
+
+    public void setLivestock_name(String livestock_name) {
+        this.livestock_name = livestock_name;
     }
 }

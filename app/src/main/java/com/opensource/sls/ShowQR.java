@@ -19,11 +19,14 @@ public class ShowQR extends AppCompatActivity {
     private ImageView qrCodeImageView;
     private Button generateButton;
     Bitmap qrCodeBitmap;
+    ImageView backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_qr);
+        backButton = findViewById(R.id.QR_back);
+
         Intent intent  = getIntent();
         CamQRDto camQRDto = (CamQRDto) intent.getSerializableExtra("QR_info");
         qrCodeImageView = findViewById(R.id.qrCodeImageView);
@@ -46,11 +49,20 @@ public class ShowQR extends AppCompatActivity {
                 }
             }
         });
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent1 = new Intent(getApplicationContext(), ConnectCamActivity.class);
+                startActivity(intent1);
+            }
+        });
     }
 
     private Bitmap generateQRCode(CamQRDto camQRDto) throws WriterException {
         String qrCodeData = camQRDto.getUid() + "|"
                 + camQRDto.getLivestock_type() + "|"
+                + camQRDto.getLivestock_name() + "|"
                 + camQRDto.getWifi_name() + "|"
                 + camQRDto.getWifi_pwd();
         int qrCodeSize = 500;

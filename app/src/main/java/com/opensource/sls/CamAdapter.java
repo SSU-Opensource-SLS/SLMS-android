@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,15 +15,15 @@ public class CamAdapter extends RecyclerView.Adapter<CamAdapter.ViewHolder>{
     Context context;
 
     ArrayList<CamItem> items = new ArrayList<CamItem>();
-    CamAdapter.OnItemClickListener listener;
-    CamAdapter.OnItemLongClickListener listener2;
+    OnItemClickListener listener;
+    OnItemLongClickListener listener2;
 
     public interface OnItemClickListener {
-        void onItemClick(CamAdapter.ViewHolder holder, View view, int position);
+        void onItemClick(ViewHolder holder, View view, int position);
     }
 
     public interface OnItemLongClickListener {
-        void onItemLongClick(CamAdapter.ViewHolder holder, View view, int position);
+        void onItemLongClick(ViewHolder holder, View view, int position);
     }
 
     public CamAdapter(Context context) {
@@ -35,14 +36,14 @@ public class CamAdapter extends RecyclerView.Adapter<CamAdapter.ViewHolder>{
     }
 
     @Override
-    public CamAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View itemView = inflater.inflate(R.layout.cam_item, parent, false);
-        return new CamAdapter.ViewHolder(itemView);
+        return new ViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CamAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CamItem item = items.get(position);
         holder.setItem(item);
         holder.setOnItemClickListener(listener);
@@ -69,26 +70,27 @@ public class CamAdapter extends RecyclerView.Adapter<CamAdapter.ViewHolder>{
         return items.get(position);
     }
 
-    public void setOnItemClickListener(CamAdapter.OnItemClickListener listener) {
+    public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
 
-    public void setOnItemLongClickListener(CamAdapter.OnItemLongClickListener listener2) {
+    public void setOnItemLongClickListener(OnItemLongClickListener listener2) {
         this.listener2 = listener2;
     }
     static class ViewHolder extends RecyclerView.ViewHolder {
-        CamAdapter.OnItemClickListener listener;
-        CamAdapter.OnItemLongClickListener listener2;
+        OnItemClickListener listener;
+        OnItemLongClickListener listener2;
+        TextView camName;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
+            camName = itemView.findViewById(R.id.cam_name);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     int position = getBindingAdapterPosition();
                     if(listener != null) {
-                        listener.onItemClick(CamAdapter.ViewHolder.this, view, position);
+                        listener.onItemClick(ViewHolder.this, view, position);
                     }
                 }
             });
@@ -105,13 +107,13 @@ public class CamAdapter extends RecyclerView.Adapter<CamAdapter.ViewHolder>{
         }
 
         public void setItem(CamItem item) {
-            //camName.setText(item.getName());
+            camName.setText(item.getLivestock_type() + " " + item.getNum());
         }
 
-        public void setOnItemClickListener(CamAdapter.OnItemClickListener listener) {
+        public void setOnItemClickListener(OnItemClickListener listener) {
             this.listener = listener;
         }
-        public void setOnItemLongClickListener(CamAdapter.OnItemLongClickListener listener2) {
+        public void setOnItemLongClickListener(OnItemLongClickListener listener2) {
             this.listener2 = listener2;
         }
     }

@@ -25,7 +25,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:layout_marginTop="18dp"
         android:orientation="vertical"
         android:paddingLeft="24dp"
@@ -35,172 +35,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
-            android:text="축사에서 사육중인 가축의 종류를 선택해 주세요."
+            android:text="모니터링 할 가축을 선택해 주세요"
             android:textColor="#AAAAAA" />
 
-        <LinearLayout
+        <ListView
+            android:id="@+id/cam_select_livestock"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="@color/white"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:id="@+id/connectCowLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <ImageButton
-                        android:id="@+id/connectCowImageButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/white"
-                        android:scaleType="fitCenter"
-                        app:srcCompat="@drawable/cow"
-                        tools:ignore="SpeakableTextPresentCheck" />
-
-                    <TextView
-                        android:id="@+id/textView"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="4"
-                        android:gravity="center"
-                        android:text="소" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/connectPigLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <ImageButton
-                        android:id="@+id/connectPigImageButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/white"
-                        android:scaleType="fitCenter"
-                        app:srcCompat="@drawable/pig"
-                        tools:ignore="SpeakableTextPresentCheck" />
-
-                    <TextView
-                        android:id="@+id/textView2"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="4"
-                        android:gravity="center"
-                        android:text="돼지" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/connectHorseLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <ImageButton
-                        android:id="@+id/connectHorseImageButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/white"
-                        android:scaleType="fitCenter"
-                        app:srcCompat="@drawable/horse"
-                        tools:ignore="SpeakableTextPresentCheck" />
-
-                    <TextView
-                        android:id="@+id/textView3"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="4"
-                        android:gravity="center"
-                        android:text="말" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:id="@+id/connectGoatLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <ImageButton
-                        android:id="@+id/connectGoatImageButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/white"
-                        android:scaleType="fitCenter"
-                        app:srcCompat="@drawable/goat"
-                        tools:ignore="SpeakableTextPresentCheck" />
-
-                    <TextView
-                        android:id="@+id/textView4"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="4"
-                        android:gravity="center"
-                        android:text="염소" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/connectSheepLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <ImageButton
-                        android:id="@+id/connectSheepImageButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/white"
-                        android:scaleType="fitCenter"
-                        app:srcCompat="@drawable/sheep"
-                        tools:ignore="SpeakableTextPresentCheck" />
-
-                    <TextView
-                        android:id="@+id/textView5"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="4"
-                        android:gravity="center"
-                        android:text="양" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <View
-                        android:id="@+id/view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1" />
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
+            android:layout_height="match_parent"
+            android:scrollbars="vertical" />
     </LinearLayout>
 
 </LinearLayout>

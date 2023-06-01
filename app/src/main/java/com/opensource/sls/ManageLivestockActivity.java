@@ -62,7 +62,7 @@ public class ManageLivestockActivity extends AppCompatActivity implements View.O
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new LivestockAdapter(getApplicationContext());
-        getLivestockDatas(adapter,livestockItems);
+        getLivestockDatas(adapter);
         recyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickListener(new LivestockAdapter.OnItemClickListener() {
@@ -96,12 +96,13 @@ public class ManageLivestockActivity extends AppCompatActivity implements View.O
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showRegisterLivestock(adapter, new OnRegisterLivestockListener() {
+                showRegisterLivestock(adapter);
+                /*showRegisterLivestock(adapter, new OnRegisterLivestockListener() {
                     @Override
                     public void onLivestockRegistered(InputLivestockDTO livestockDTO) {
-                        getLastLivestock(adapter, livestockDTO);
-                    }
-                });
+                        //getLastLivestock(adapter, livestockDTO);
+                    }å
+                });*/
             }
         });
 
@@ -186,7 +187,8 @@ public class ManageLivestockActivity extends AppCompatActivity implements View.O
         });
     }
 
-    public void getLivestockDatas(final LivestockAdapter adapter, final ArrayList<LivestockItem> livestockItems) {
+    public void getLivestockDatas(final LivestockAdapter adapter) {
+        ArrayList<LivestockItem> livestockItems = new ArrayList<LivestockItem>();
         String url = "http://10.0.2.2:5000/livestock/" + mAuth.getUid(); // Replace with your actual API URL
         Request request = new Request.Builder()
                 .url(url)
@@ -208,14 +210,14 @@ public class ManageLivestockActivity extends AppCompatActivity implements View.O
                             String uid = livestockObject.getString("uid");
                             String livestockType = livestockObject.getString("livestock_type");
                             Long num = livestockObject.getLong("num");
-                            String name = livestockObject.getString("livestock_name");
+                            String name = livestockObject.getString("name");
                             String cattle = livestockObject.getString("cattle");
                             Number is_pregnancy = 0;
                             if (!livestockObject.isNull("is_pregnancy")) {
                                 is_pregnancy = livestockObject.getInt("is_pregnancy");
                             }
-
                             LivestockItem livestockItem = new LivestockItem(uid, livestockType, num, name, cattle, is_pregnancy);
+                            System.out.println(livestockItem.getName());
                             livestockItems.add(livestockItem);
                         }
 
@@ -258,7 +260,7 @@ public class ManageLivestockActivity extends AppCompatActivity implements View.O
         deleteDlg.show();
     }
 
-    public void showRegisterLivestock(final LivestockAdapter adapter, final OnRegisterLivestockListener listener) {
+    public void showRegisterLivestock(final LivestockAdapter adapter) {
         final String[] livestock_type = {""};
         //final AtomicReference<String> finalLivestockType = new AtomicReference<>(livestock_type);
 
@@ -353,7 +355,7 @@ public class ManageLivestockActivity extends AppCompatActivity implements View.O
                 registerLivestock(item);
 
                 // 완료 콜백을 호출하여 getLastLivestock 함수를 호출
-                listener.onLivestockRegistered(item);
+                //listener.onLivestockRegistered(item);
             }
         });
         registerDlg.setNegativeButton("취소", new DialogInterface.OnClickListener() {
@@ -363,43 +365,5 @@ public class ManageLivestockActivity extends AppCompatActivity implements View.O
             }
         });
         registerDlg.show();
-    }
-
-    public void getLastLivestock(final LivestockAdapter adapter, InputLivestockDTO inputLivestockDTO) {
-        String jsonBody = gson.toJson(inputLivestockDTO);
-
-        String url = "http://10.0.2.2:5000/livestock/last/" + inputLivestockDTO.getUid() + "/" + inputLivestockDTO.getLivestock_type();
-        Request request = new Request.Builder()
-                .url(url)
-                .get()
-                .build();
-
-        Call call = client.newCall(request);
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                // Handle failure
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    String responseBody = response.body().string();
-                    LivestockItem livestockItem = gson.fromJson(responseBody, LivestockItem.class);
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            adapter.addItem(livestockItem);
-                            adapter.notifyDataSetChanged();
-                        }
-                    });
-                } else {
-                    // Handle error response
-                    // ...
-                }
-            }
-        });
     }
 }

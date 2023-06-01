@@ -3,14 +3,16 @@ package com.opensource.sls;
 public class UserModel {
     private String uid;
     private String name;
+    private String token;
     private String email;
     private String birth;
 
     public UserModel() {}
 
-    public UserModel(String uid, String name, String email, String birth) {
+    public UserModel(String uid, String name, String token, String email, String birth) {
         this.uid = uid;
         this.name = name;
+        this.token = token;
         this.email = email;
         this.birth = birth;
     }
@@ -29,6 +31,14 @@ public class UserModel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getEmail() {

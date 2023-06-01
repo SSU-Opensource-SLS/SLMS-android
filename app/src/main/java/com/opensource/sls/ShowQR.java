@@ -15,6 +15,8 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.opensource.sls.DTO.CamQRDto;
 
+import java.nio.charset.StandardCharsets;
+
 public class ShowQR extends AppCompatActivity {
     private ImageView qrCodeImageView;
     private Button generateButton;
@@ -65,10 +67,11 @@ public class ShowQR extends AppCompatActivity {
                 + camQRDto.getLivestock_name() + "|"
                 + camQRDto.getWifi_name() + "|"
                 + camQRDto.getWifi_pwd();
+        byte[] qrCodeDataBytes = qrCodeData.getBytes(StandardCharsets.UTF_8); // UTF-8 인코딩
         int qrCodeSize = 500;
 
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
-        BitMatrix bitMatrix = qrCodeWriter.encode(qrCodeData, BarcodeFormat.QR_CODE, qrCodeSize, qrCodeSize);
+        BitMatrix bitMatrix = qrCodeWriter.encode(new String(qrCodeDataBytes, StandardCharsets.UTF_8), BarcodeFormat.QR_CODE, qrCodeSize, qrCodeSize);
         int width = bitMatrix.getWidth();
         int height = bitMatrix.getHeight();
         Bitmap qrCodeBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
@@ -81,4 +84,5 @@ public class ShowQR extends AppCompatActivity {
 
         return qrCodeBitmap;
     }
+
 }

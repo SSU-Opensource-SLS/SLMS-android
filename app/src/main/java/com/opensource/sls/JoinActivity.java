@@ -1,5 +1,7 @@
 package com.opensource.sls;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import com.google.android.gms.tasks.Task;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -20,6 +23,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -115,6 +119,27 @@ public class JoinActivity extends AppCompatActivity {
         FragmentView(2);
     }
 
+    private void getFirebaseToken(UserModel userModel) {
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+
+                        // Get new FCM registration token
+                        String token = task.getResult();
+                        userModel.setToken(token);
+                        registerMember(userModel);
+
+                        // Log token
+                        Log.d(TAG, "FCM registration token: " + token);
+                    }
+                });
+    }
+
     public void createUser(String name, String email, String password) {
         // Exception to allow all Edittexts to be entered
         if (name.equals("")) { Toast.makeText(JoinActivity.this, "이름을 입력해 주세요.", Toast.LENGTH_SHORT).show(); return; }
@@ -128,8 +153,7 @@ public class JoinActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             final String uid = task.getResult().getUser().getUid();     // UID(Unified ID) 생성
                             userModel.setUid(uid); userModel.setEmail(email); userModel.setName(name);
-                            registerMember(userModel);
-                            //db.collection("user").document(uid).set(userModel);
+                            getFirebaseToken(userModel);
                             Toast.makeText(JoinActivity.this, "회원가입을 완료하였습니다.", Toast.LENGTH_SHORT).show();
                             finish();
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);

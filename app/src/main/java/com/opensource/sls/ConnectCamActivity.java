@@ -112,7 +112,7 @@ public class ConnectCamActivity extends AppCompatActivity {
     }
 
     public void getCamDatas(final CamAdapter adapter, final ArrayList<CamItem> camItems) {
-        String url = "http://10.0.2.2:5000/cam/" + mAuth.getUid(); // Replace with your actual API URL
+        String url = "http://203.253.25.48:5000/cam/" + mAuth.getUid(); // Replace with your actual API URL
         Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -247,7 +247,7 @@ public class ConnectCamActivity extends AppCompatActivity {
 
     public void deleteCam(CamItem camItem) {
         // 요청 URL 생성
-        String url = "http://10.0.2.2:5000/cam/" + camItem.getUid() + "/" +
+        String url = "http://203.253.25.48:5000/cam/" + camItem.getUid() + "/" +
                 camItem.getLivestock_type() + "/" + camItem.getNum();
 
         // DELETE 요청 생성
@@ -332,7 +332,7 @@ public class ConnectCamActivity extends AppCompatActivity {
 
     public void getLivestockDatas(final MyLivestockAdapter adapter) {
         ArrayList<LivestockItem> livestockItems = new ArrayList<LivestockItem>();
-        String url = "http://10.0.2.2:5000/livestock/" + mAuth.getUid(); // Replace with your actual API URL
+        String url = "http://203.253.25.48:5000/livestock/" + mAuth.getUid(); // Replace with your actual API URL
         Request request = new Request.Builder()
                 .url(url)
                 .build();

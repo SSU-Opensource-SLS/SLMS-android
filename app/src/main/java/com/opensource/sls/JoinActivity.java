@@ -119,27 +119,6 @@ public class JoinActivity extends AppCompatActivity {
         FragmentView(2);
     }
 
-    private void getFirebaseToken(UserModel userModel) {
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(new OnCompleteListener<String>() {
-                    @Override
-                    public void onComplete(@NonNull Task<String> task) {
-                        if (!task.isSuccessful()) {
-                            Log.w(TAG, "Fetching FCM registration token failed", task.getException());
-                            return;
-                        }
-
-                        // Get new FCM registration token
-                        String token = task.getResult();
-                        userModel.setToken(token);
-                        registerMember(userModel);
-
-                        // Log token
-                        Log.d(TAG, "FCM registration token: " + token);
-                    }
-                });
-    }
-
     public void createUser(String name, String email, String password) {
         // Exception to allow all Edittexts to be entered
         if (name.equals("")) { Toast.makeText(JoinActivity.this, "이름을 입력해 주세요.", Toast.LENGTH_SHORT).show(); return; }
@@ -153,7 +132,7 @@ public class JoinActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             final String uid = task.getResult().getUser().getUid();     // UID(Unified ID) 생성
                             userModel.setUid(uid); userModel.setEmail(email); userModel.setName(name);
-                            getFirebaseToken(userModel);
+                            registerMember(userModel);
                             Toast.makeText(JoinActivity.this, "회원가입을 완료하였습니다.", Toast.LENGTH_SHORT).show();
                             finish();
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -169,7 +148,7 @@ public class JoinActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                String url = "http://10.0.2.2:5000/member";
+                String url = "http://203.253.25.48:5000/member";
                 String json = gson.toJson(userModel);
 
                 RequestBody requestBody = RequestBody.create(json, MediaType.get("application/json; charset=utf-8"));

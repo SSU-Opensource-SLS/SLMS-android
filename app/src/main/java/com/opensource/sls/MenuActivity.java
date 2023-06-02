@@ -2,6 +2,7 @@ package com.opensource.sls;
 
 import static android.content.ContentValues.TAG;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -25,8 +26,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MenuActivity extends AppCompatActivity {
+    private static final int PERMISSION_REQUEST_CODE = 1;
     private View monitoringButton;
     private View manageLivestockButton;
+    private View communityButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +37,22 @@ public class MenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_menu);
         monitoringButton = findViewById(R.id.monitoringButton);
         manageLivestockButton = findViewById(R.id.manageButton);
-        isPostNotificationsPermissionGranted();
+        communityButton = findViewById(R.id.communityButton);
+        //isPostNotificationsPermissionGranted();
+        // 권한이 허용되었는지 확인
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NOTIFICATION_POLICY) != PackageManager.PERMISSION_GRANTED) {
+            // 권한이 허용되지 않은 경우 권한 요청
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_NOTIFICATION_POLICY)) {
+                // 권한 요청 이유를 설명하는 다이얼로그 표시
+                showPermissionExplanationDialog();
+            } else {
+                // 권한 요청 다이얼로그 표시
+                requestPermission();
+            }
+        } else {
+            // 권한이 이미 허용된 경우 알림 소리 설정 코드 작성
+            //setNotificationSound();
+        }
 
         monitoringButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,6 +69,14 @@ public class MenuActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        communityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), CommunityActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -58,6 +84,43 @@ public class MenuActivity extends AppCompatActivity {
         super.onResume();
         askNotificationPermission();
         displayFirebaseToken();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // 권한이 허용된 경우 알림 소리 설정 코드 작성
+                //setNotificationSound();
+            } else {
+                // 권한이 거부된 경우 사용자에게 설명하거나 다른 조치를 취할 수 있습니다.
+                // ...
+            }
+        }
+    }
+
+    private void showPermissionExplanationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("권한 요청")
+                .setMessage("알림 권한이 필요합니다. 권한을 허용하시겠습니까?")
+                .setPositiveButton("허용", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        requestPermission();
+                    }
+                })
+                .setNegativeButton("거부", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 권한 거부 처리
+                    }
+                })
+                .show();
+    }
+
+    private void requestPermission() {
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_NOTIFICATION_POLICY}, PERMISSION_REQUEST_CODE);
     }
 
     // Declare the launcher at the top of your Activity/Fragment:
@@ -114,7 +177,7 @@ public class MenuActivity extends AppCompatActivity {
     private void isPostNotificationsPermissionGranted() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             // Check if the permission is granted
-            int result = checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS);
+            int result = checkSelfPermission(Manifest.permission.ACCESS_NOTIFICATION_POLICY);
             Toast.makeText(getApplicationContext(), "권한 허가 됨", Toast.LENGTH_SHORT).show();
         }
         Toast.makeText(getApplicationContext(), "권한 허가 안 됨", Toast.LENGTH_SHORT).show();

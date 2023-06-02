@@ -119,7 +119,7 @@ public class ManageLivestockActivity extends AppCompatActivity implements View.O
         new Thread(new Runnable() {
             @Override
             public void run() {
-                String url = "http://10.0.2.2:5000/livestock";
+                String url = "http://203.253.25.48:5000/livestock";
                 String json = gson.toJson(item);
 
                 RequestBody requestBody = RequestBody.create(json, MediaType.get("application/json; charset=utf-8"));
@@ -150,7 +150,7 @@ public class ManageLivestockActivity extends AppCompatActivity implements View.O
 
     public void deleteLivestock(LivestockItem livestockItem) {
         // 요청 URL 생성
-        String url = "http://10.0.2.2:5000/livestock/" + livestockItem.getUid() + "/" +
+        String url = "http://203.253.25.48:5000/livestock/" + livestockItem.getUid() + "/" +
                 livestockItem.getLivestock_type() + "/" + livestockItem.getNum();
 
         // DELETE 요청 생성
@@ -189,7 +189,7 @@ public class ManageLivestockActivity extends AppCompatActivity implements View.O
 
     public void getLivestockDatas(final LivestockAdapter adapter) {
         ArrayList<LivestockItem> livestockItems = new ArrayList<LivestockItem>();
-        String url = "http://10.0.2.2:5000/livestock/" + mAuth.getUid(); // Replace with your actual API URL
+        String url = "http://203.253.25.48:5000/livestock/" + mAuth.getUid(); // Replace with your actual API URL
         Request request = new Request.Builder()
                 .url(url)
                 .build();

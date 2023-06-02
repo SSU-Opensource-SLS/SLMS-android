@@ -38,7 +38,7 @@ public class MonitoringActivity extends AppCompatActivity {
         client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("http://10.0.2.2:5000/stream")
+                .url("http://203.253.25.48:5000/stream")
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
